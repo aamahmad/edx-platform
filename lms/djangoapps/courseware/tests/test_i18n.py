@@ -15,11 +15,12 @@ from config_models.models import cache
 
 from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
 from openedx.core.djangoapps.lang_pref import LANGUAGE_KEY
+from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
 from openedx.core.lib.tests import attr
 from student.tests.factories import UserFactory
 
 
-class BaseI18nTestCase(TestCase):
+class BaseI18nTestCase(CacheIsolationTestCase):
     """
     Base utilities for i18n test classes to derive from
     """
@@ -54,7 +55,6 @@ class BaseI18nTestCase(TestCase):
             changed_by=user,
             enabled=True
         ).save()
-        self.addCleanup(cache.clear)
 
     def create_user(self):
         """

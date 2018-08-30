@@ -14,12 +14,12 @@ from django.db.utils import IntegrityError
 from django.test.utils import override_settings
 from django.utils import timezone
 from PIL import Image
-from config_models.models import cache
 
 from lms.djangoapps.certificates.api import get_active_web_certificate
 from openedx.core.djangoapps.catalog.tests.mixins import CatalogIntegrationMixin
 from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
 from openedx.core.djangoapps.models.course_details import CourseDetails
+from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
 from openedx.core.lib.courses import course_image_url
 from static_replace.models import AssetBaseUrlConfig
 from xmodule.assetstore.assetmgr import AssetManager
@@ -42,7 +42,7 @@ from .factories import CourseOverviewFactory
 
 
 @ddt.ddt
-class CourseOverviewTestCase(CatalogIntegrationMixin, ModuleStoreTestCase):
+class CourseOverviewTestCase(CatalogIntegrationMixin, ModuleStoreTestCase, CacheIsolationTestCase):
     """
     Tests for CourseOverview model.
     """
@@ -302,7 +302,6 @@ class CourseOverviewTestCase(CatalogIntegrationMixin, ModuleStoreTestCase):
     @ddt.unpack
     def test_closest_released_language(self, released_languages, course_language, expected_language):
         DarkLangConfig(released_languages=released_languages, enabled=True, changed_by=self.user).save()
-        self.addCleanup(cache.clear)
         course_overview = CourseOverviewFactory.create(language=course_language)
         self.assertEqual(course_overview.closest_released_language, expected_language)
 

@@ -13,6 +13,7 @@ from config_models.models import cache
 
 from openedx.core.djangoapps.dark_lang.middleware import DarkLangMiddleware
 from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
+from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
 from student.tests.factories import UserFactory
 
 UNSET = object()
@@ -28,7 +29,7 @@ def set_if_set(dct, key, value):
 
 
 @ddt.ddt
-class DarkLangMiddlewareTests(TestCase):
+class DarkLangMiddlewareTests(CacheIsolationTestCase):
     """
     Tests of DarkLangMiddleware
     """
@@ -43,7 +44,6 @@ class DarkLangMiddlewareTests(TestCase):
             changed_by=self.user,
             enabled=True
         ).save()
-        self.addCleanup(cache.clear)
 
     def process_middleware_request(self, language_session_key=UNSET, accept=UNSET):
         """
