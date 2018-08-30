@@ -25,7 +25,7 @@ from edx_django_utils.cache import RequestCache
 class CacheIsolationMixin(object):
     """
     This class can be used to enable specific django caches for
-    specific the TestCase that it's mixed into.
+    the specific TestCase that it's mixed into.
 
     Usage:
 

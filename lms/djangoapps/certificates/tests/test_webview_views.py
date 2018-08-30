@@ -12,7 +12,6 @@ from django.urls import reverse
 from django.test.client import Client, RequestFactory
 from django.test.utils import override_settings
 from mock import patch
-from config_models.models import cache
 
 import ddt
 from lms.djangoapps.certificates.api import get_certificate_url
@@ -42,6 +41,7 @@ from openedx.core.djangoapps.certificates.config import waffle
 from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
 from openedx.core.lib.tests.assertions.events import assert_event_matches
 from openedx.core.djangolib.js_utils import js_escaped_string
+from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
 from student.roles import CourseStaffRole
 from student.tests.factories import CourseEnrollmentFactory, UserFactory
 from track.tests import EventTrackingTestCase
@@ -1168,7 +1168,6 @@ class CertificatesViewsTests(CommonCertificatesTestCase):
         This test should check template matching when org={org}, course={course}, mode={mode}.
         """
         DarkLangConfig(released_languages='es-419, fr', changed_by=self.user, enabled=True).save()
-        self.addCleanup(cache.clear)
 
         right_language = 'es'
         wrong_language = 'fr'
@@ -1245,7 +1244,6 @@ class CertificatesViewsTests(CommonCertificatesTestCase):
         This test should check template matching when org={org}, course=Null, mode={mode}.
         """
         DarkLangConfig(released_languages='es-419, fr', changed_by=self.user, enabled=True).save()
-        self.addCleanup(cache.clear)
 
         right_language = 'es'
         wrong_language = 'fr'
@@ -1304,7 +1302,6 @@ class CertificatesViewsTests(CommonCertificatesTestCase):
         This test should check template matching when org={org}, course=Null, mode=null.
         """
         DarkLangConfig(released_languages='es-419, fr', changed_by=self.user, enabled=True).save()
-        self.addCleanup(cache.clear)
 
         right_language = 'es'
         wrong_language = 'fr'
@@ -1362,7 +1359,6 @@ class CertificatesViewsTests(CommonCertificatesTestCase):
         This test should check template matching when org=null, course=Null, mode={mode}.
         """
         DarkLangConfig(released_languages='es-419, fr', changed_by=self.user, enabled=True).save()
-        self.addCleanup(cache.clear)
 
         right_language = 'es'
         wrong_language = 'fr'
@@ -1424,7 +1420,6 @@ class CertificatesViewsTests(CommonCertificatesTestCase):
         This test should check template matching when org=null, course=Null, mode={mode}.
         """
         DarkLangConfig(released_languages='es-419, fr', changed_by=self.user, enabled=True).save()
-        self.addCleanup(cache.clear)
 
         right_language = 'es'
         wrong_language = 'fr'
