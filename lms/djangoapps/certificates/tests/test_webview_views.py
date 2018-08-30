@@ -242,7 +242,7 @@ class CommonCertificatesTestCase(ModuleStoreTestCase):
 
 
 @ddt.ddt
-class CertificatesViewsTests(CommonCertificatesTestCase):
+class CertificatesViewsTests(CommonCertificatesTestCase, CacheIsolationTestCase):
     """
     Tests for the certificates web/html views
     """
