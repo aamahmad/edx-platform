@@ -5,7 +5,6 @@ import urllib
 
 import ddt
 import mock
-from config_models.models import cache
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -16,18 +15,14 @@ from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
 from openedx.core.djangoapps.lang_pref.api import released_languages
 from openedx.core.djangoapps.site_configuration.tests.mixins import SiteMixin
 from openedx.core.djangoapps.theming.tests.test_util import with_comprehensive_theme_context
+from openedx.core.djangolib.testing.utils import CacheIsolationTestCase
 from student.tests.factories import UserFactory
 
 
 @ddt.ddt
-class TestFooter(TestCase):
+class TestFooter(CacheIsolationTestCase):
     """Test API end-point for retrieving the footer. """
     shard = 4
-
-    def setUp(self):
-        """Clear the configuration cache. """
-        super(TestFooter, self).setUp()
-        cache.clear()
 
     @ddt.data("*/*", "text/html", "application/json")
     def test_feature_flag(self, accepts):
@@ -228,7 +223,6 @@ class TestFooter(TestCase):
     def test_include_language_selector(self, theme, language, include_language_selector):
         self._set_feature_flag(True)
         DarkLangConfig(released_languages='en,eo,es-419,fr', enabled=True, changed_by=User().save()).save()
-        self.addCleanup(cache.clear)
 
         with with_comprehensive_theme_context(theme):
             params = {

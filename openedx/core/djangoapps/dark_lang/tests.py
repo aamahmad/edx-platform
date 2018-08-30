@@ -9,7 +9,6 @@ from django.test import TestCase
 from django.test.client import Client
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from mock import Mock
-from config_models.models import cache
 
 from openedx.core.djangoapps.dark_lang.middleware import DarkLangMiddleware
 from openedx.core.djangoapps.dark_lang.models import DarkLangConfig
