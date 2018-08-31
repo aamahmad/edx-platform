@@ -113,8 +113,10 @@ def _is_not_subcomment(comment_id):
 
 def _is_first_comment(comment_id, thread_id):
     thread = cc.Thread.find(id=thread_id).retrieve(with_responses=True)
-    first_comment = thread.children[0]
-    return first_comment.get('id') == comment_id
+    if getattr(thread, 'children', None):
+        first_comment = thread.children[0]
+        return first_comment.get('id') == comment_id
+    return False
 
 
 def _is_user_subscribed_to_thread(cc_user, thread_id):
